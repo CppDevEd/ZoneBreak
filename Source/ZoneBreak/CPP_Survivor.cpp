@@ -23,7 +23,7 @@ ACPP_Survivor::ACPP_Survivor()
 	//Setting up survivor mesh component
 	SurvivorMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerMesh"));
 	SurvivorMesh->SetupAttachment(GetRootComponent());
-    
+
 	//Setting up survivor camera component
 	SurvivorCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	SurvivorCamera->SetupAttachment(GetMesh(), FName("head"));
@@ -35,15 +35,13 @@ ACPP_Survivor::ACPP_Survivor()
 	//Setting up equipment component
 	EquipmentComponent = CreateDefaultSubobject<UCPP_EquipmentComponent>(TEXT("EquipmentComponent"));
 
-
-    //Settin up overlap events
+	//Settin up overlap events
 	SetUpOverlapEvents();
 }
 
 void ACPP_Survivor::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void ACPP_Survivor::Tick(float DeltaTime)
@@ -57,9 +55,11 @@ void ACPP_Survivor::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	//Event::Binds
 	PlayerInputComponent->BindAction(FName("ToggleInventory"), IE_Pressed, this, &ACPP_Survivor::ToggleInventory);
-	
+
 	PlayerInputComponent->BindAction(FName("EquipMelee"), IE_Pressed, this, &ACPP_Survivor::EquipMelee);
 	PlayerInputComponent->BindAction(FName("MeleeAttack"), IE_Pressed, this, &ACPP_Survivor::MeleeAttack);
+
+	PlayerInputComponent->BindAction(FName("TogglePrimarySlot"), IE_Pressed, this, &ACPP_Survivor::TogglePrimary);
 
 	//Axis::Binds
 	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &ACPP_Survivor::MoveForward);
@@ -68,7 +68,7 @@ void ACPP_Survivor::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis(FName("LookRight"), this, &ACPP_Survivor::LookRight);
 }
 
-                  ///<Getters && setters>
+///<Getters && setters>
 class UCPP_EquipmentComponent* ACPP_Survivor::GetEquipmentComponent() const
 {
 	if (!EquipmentComponent) return nullptr;
@@ -89,8 +89,16 @@ void ACPP_Survivor::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherAc
 		//Casting other actor to weapon base class
 		class ACPP_WeaponBase* Weapon = Cast<class ACPP_WeaponBase>(OtherActor);
 		if (!Weapon) return;
-		//Calling on weapon collected
-		Weapon->OnWeaponCollect(this);
+
+		//Adding weapon to inventory
+		if (!InventoryComponent) return;
+		
+		//Storing weapon in inventory if possible
+		if (InventoryComponent->WeaponOverlapped(Weapon))
+		{
+			//Calling on weapon collected
+			Weapon->OnWeaponCollect(this);
+		}
 	}
 }
 
@@ -101,6 +109,7 @@ void ACPP_Survivor::SetUpOverlapEvents()
 }
 
                   ///<Event binds>
+
 void ACPP_Survivor::ToggleInventory()
 {
 	InventoryComponent->ToggleMainInventory();
@@ -110,6 +119,13 @@ void ACPP_Survivor::EquipMelee()
 {
 	//Equipping knife
 	EquipmentComponent->EquipKnife();
+}
+
+void ACPP_Survivor::TogglePrimary()
+{
+	//Toggles any weapon which is in primary slot
+	EquipmentComponent->EquipPrimary();
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("TogglePrimaryCalled"));
 }
 
 void ACPP_Survivor::MeleeAttack() 

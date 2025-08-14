@@ -10,12 +10,15 @@
 #include "CPP_EquipmentComponent.generated.h"
 
 
-//Tracks what character currently has equiped || Add as needed
+//Tracks what character currently has equiped | Add as needed
 UENUM(BlueprintType)
 enum class EEquipType : uint8
 {
 	None     UMETA(DisplayName = "None"),
-	Knife    UMETA(DisplayName = Knife)
+	Knife    UMETA(DisplayName = "Knife"),
+	
+	//Any rifle-type in the primary weapon slot
+	PrimaryWeapon  UMETA(DisplayName = "PrimaryWeapon")
 };
 
 //Holds equipment functions
@@ -62,12 +65,21 @@ public:
 	bool CurrentEquipment(EEquipType Type) const;
 
 	///<Equip functions>
-	
+
+	//Primary weapon slot (StorageType::Rifle)
+	void EquipPrimary();
+	void GetPrimarySlot(class UPrimaryWeaponSlotWidget* PrimaryWeaponSlotClass);
+
+	//Points to instance of primary weapon slot widget class
+	class UPrimaryWeaponSlotWidget* PrimaryWeaponSlot;
+
+
 	//Knife functions && components
 	void EquipKnife();
 	void GetKnifeClass(class ACPP_DefaultKnife* KnifeClass);
 	//Points to knife class instance
 	class ACPP_DefaultKnife* Knife;
+
 protected:
 	     /// <Protected equipment component functions && components>
 	

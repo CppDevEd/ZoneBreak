@@ -1,30 +1,27 @@
 //Engine imports
-#include "PrimaryWeaponSlotWidget.h"
+#include "SecondaryPrimarySlotWidget.h"
 
 //Other imports
-#include "CPP_EquipmentComponent.h"
 #include "InventoryComponent.h"
 
-#include "CPP_WeaponBase.h"
 
-void UPrimaryWeaponSlotWidget::NativeConstruct()
+void USecondaryPrimarySlotWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//Setting weapon slot size on construct
+	//Setting slot size
 	WeaponSlotSizeData.SetSlotSize();
-
-	//Passing self to equipment component class
-	EquipmentComp->GetPrimarySlot(this);
 }
 
-void UPrimaryWeaponSlotWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+
+void USecondaryPrimarySlotWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 }
 
-                   ///<UI input event functions>
-void UPrimaryWeaponSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, class UDragDropOperation*& OutOperation)
+
+                    ///<UI input event functions>
+void USecondaryPrimarySlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, class UDragDropOperation*& OutOperation)
 {
 	//Creating new drag drop operation in memory
 	class UDragDropOperation* DragDropOperation = NewObject<class UDragDropOperation>();
@@ -33,7 +30,7 @@ void UPrimaryWeaponSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry,
 
 	//Performing visual drag operation on item icon
 	DragDropOperation->DefaultDragVisual = CreateVisualDragImage(CollectedItemIcon);
-	
+
 	//Removing static image from slot render
 	CollectedItemIcon->SetVisibility(ESlateVisibility::Collapsed);
 
@@ -51,7 +48,7 @@ void UPrimaryWeaponSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry,
 	}
 	//Removing weapon from weapon slot when being dragged
 	InventoryComp->RemoveWeapon(WeaponSlotSizeData, CurrentWeapon);
-	
+
 	//Adding slot icon back into render
 	AddSlotIcon();
 
@@ -59,11 +56,10 @@ void UPrimaryWeaponSlotWidget::NativeOnDragDetected(const FGeometry& InGeometry,
 	OutOperation = DragDropOperation;
 }
 
-FReply UPrimaryWeaponSlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+FReply USecondaryPrimarySlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	return FReply::Handled().DetectDrag(TakeWidget(), EKeys::LeftMouseButton);
 }
-
 
 
 

@@ -8,6 +8,11 @@
 class UCanvasPanel;
 class UBorder;
 class UBackgroundBlur;
+class UPanelWidget;
+
+//Other imports
+class ACPP_Survivor;
+class UInventoryComponent;
 
 //Engine imports
 #include "CoreMinimal.h"
@@ -23,6 +28,16 @@ class ZONEBREAK_API UInventoryWidget : public UUserWidget
 private:
 	       ///<Private inventory widget components && functions>
 	virtual void NativeConstruct() override;
+    
+	//Sets class references on construct
+	void SetClassReferences();
+
+	//Global class references
+	ACPP_Survivor* PlayerCharacter;
+	UInventoryComponent* InventoryComp;
+
+	//Used to get widget root
+	UPanelWidget* PanelWidget;
 
 public:
 	      ///<Public inventory widget components && functions>
@@ -35,4 +50,25 @@ public:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "UI");
 	UBackgroundBlur* Blur;
+
+
+	                 ///<Getters>
+	//Returns widget root
+	class UPanelWidget* InventoryCache();
+
+	  ///<Misc helper components && references && functions>
+	
+	//Points to the latest drag and dropped spawned weapon
+	class ACPP_WeaponBase* SpawnedWeapon;
+
+
+
+protected:
+	      ///<Protected inventory widget components && functions>
+
+	             ///<UI input event function overrides>
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+    
+	//Spawns instances of drpped items
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, class UDragDropOperation* InOperation) override;
 };

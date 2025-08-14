@@ -1,6 +1,6 @@
 #pragma once
 
-///This class is a child of UGearSlotWidgetBase, it is the primary weapon
+///This class is a child of UGearSlotWidgetBase, it is the second primary weapon
 ///slot found in the inventory, its storage type is rifles (this extendes to
 /// shot-guns, lmg's, snipers etc.
 
@@ -8,16 +8,17 @@
 //Engine imports
 #include "CoreMinimal.h"
 #include "GearSlotWidgetBase.h"
-#include "PrimaryWeaponSlotWidget.generated.h"
+#include "SecondaryPrimarySlotWidget.generated.h"
 
 
 UCLASS()
-class ZONEBREAK_API UPrimaryWeaponSlotWidget : public UGearSlotWidgetBase
+class ZONEBREAK_API USecondaryPrimarySlotWidget : public UGearSlotWidgetBase
 {
 	GENERATED_BODY()
-
+	
 private:
-	    ///<Private PrimaryWeaponSlotWidget components && functions>
+	    ///<Private Secondary primary slot widget functions && components>
+
 	virtual void NativeConstruct() override;
 
 	//Pointer to current weapon in slot
@@ -28,11 +29,9 @@ private:
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, class UDragDropOperation*& OutOperation) override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
-	                      
-	                         ///<Misc>
-	//Engine override function
+	                     ///<Misc>
+	//Engine function overrides
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
 public:
-	    ///<Public PrimaryWeaponSlotWidget components && functions>
+
 };

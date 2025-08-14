@@ -71,7 +71,6 @@ public:
     
 	//Returns inventory component across classes
 	UInventoryComponent* GetInventoryComponent() const;
-
 protected:
 	             ///<Protected character functions && components>
 	
@@ -83,10 +82,13 @@ protected:
 	//Allows overlap trigger events
 	void SetUpOverlapEvents();
 
-
+   ///<Event bind functions>
 
 	void ToggleInventory();
 	
+	//Weapon binds
+	void TogglePrimary();
+
 	//Melee Binds
 	void EquipMelee();
 	void MeleeAttack();
@@ -96,6 +98,9 @@ protected:
 	void MoveRight(const float Value);
 	void LookUp(const float Value);
 	void LookRight(const float Value);
+
+
+	///<Misc>
 
 	//Engine override functions
 	virtual void BeginPlay() override;
